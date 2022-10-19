@@ -1,0 +1,28 @@
+
+
+SQL ASSIGNMENTS:
+
+Q1:-> select c.custid,c.custname from customer c left outer join bill b on  c.custid =b.custid where b.custid is null
+
+Q2:-> select p.catid, max(price) as highestprice from product p inner join category c where c.catid = p.catid ;
+
+Q3:-> select p.catid, min(price) as lowestprice from product p inner join category c where c.catid = p.catid ;
+
+Q4:-> 
+
+Q5:-> 
+
+Q6:-> 
+
+Q7:-> select  p.pid , p.pname,p.compid,c.compname ,count(*) from product p inner join company c on p.compid= c.compid group by p.pid,p.compid,p.pname,c.compname;
+
+Q8:->
+
+Q9:->
+
+Q10:->
+
+Q11:->
+
+Q12:-> select b.billno,c.custid,c.custname,b.qty as totalitembyeachcustomer from customer c left outer join bill b on c.custid = b.custid; 
+
