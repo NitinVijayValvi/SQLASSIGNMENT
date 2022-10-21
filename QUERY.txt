@@ -1,109 +1,90 @@
-=====================================*SQL Queries*======================================
-
-Q1. WDSQl to print those customer who have not buy any product.
- SELECT * FROM Customers 
-LEFT JOIN Orders ON  C_Id = O_CustomerId
-WHERE O_CustomerId is NULL
+Q1.->select * from customers 
+left join orders on  c_id = o_customerid
+where o_customerid is null
 
 
-Q2 WDSQL to print categories with highest item price
-   SELECT Category, MAX(Price)
-             FROM Products
-             GROUP BY Category
+Q2. ->select category, max(price)
+             from products
+             group by category
 
-Q.3 WDSQL  to print categories with lowest item price
--> SELECT Category, MIN(Price)
-             FROM Products
-             GROUP BY Category
+Q3. -> select category, min(price)
+             from products
+             group by category
 
-Q4. WDSQL to print company name along with category and total item in that category
+Q4.-> select category,industry, count(*) as 'number'
+from field
+group by category,industry
 
--> select Category,Industry, count(*) as 'Number'
-from Field
-group by Category,Industry
+Q5.-> select date(order_placed_date)
+     , count(id) as num_orders
+     , sum(order_total) as daily_total
+  from [table]
+ group by date(order_placed_date)
 
-Q.5
--> SELECT date(order_placed_date)
-     , COUNT(id) AS num_orders
-     , SUM(order_total) AS daily_total
-  FROM [Table]
- GROUP BY date(order_placed_date)
+Q6.-> select c.customerid, sum(ord.quantity*p.price) as 
+total_amount
+from customers c inner join orders o
+     on c.customerid = o.customerid join
+     orderdetails ord
+     on o.orderid = ord.orderid join
+     products p
+     on ord.productid = p.productid
+group by customerid;
 
-Q.6
--> SELECT c.CustomerID, SUM(ord.Quantity*p.Price) as 
-Total_Amount
-FROM Customers c inner join Orders o
-     on c.CustomerID = o.CustomerID join
-     OrderDetails ord
-     on o.OrderID = ord.OrderID join
-     Products p
-     on ord.ProductID = p.ProductID
-GROUP BY CustomerID;
+Q7.-> select category, count(*) as noofitems
+from items i
+group by category;
 
-Q-7
-
--> SELECT category, count(*) as Noofitems
-FROM items i
-GROUP BY category;
-
-Q.8
-
--> select name,
+Q8.-> select name,
        count(id) as ct, 
-       group_concat(id) as IDs
+       group_concat(id) as ids
 from names
 group by name
 order by ct desc;
-Q.9
--> SELECT c.CustomerID,o.OrderID,SUM(ord.Quantity*p.Price) as Total_Amount
-from Customers c inner join Orders o
-inner join Products p
-inner join OrderDetails ord
-on c.CustomerID = o.CustomerID
-and o.OrderID = ord.OrderID
-and ord.ProductID = p.ProductID
-Group By c.CustomerID,o.OrderID
+Q9.-> select c.customerid,o.orderid,sum(ord.quantity*p.price) as total_amount
+from customers c inner join orders o
+inner join products p
+inner join orderdetails ord
+on c.customerid = o.customerid
+and o.orderid = ord.orderid
+and ord.productid = p.productid
+group by c.customerid,o.orderid
 
-Q.10
--> select DateAdded, count(CustID)
+Q10.-> select dateadded, count(custid)
 from tbl
-group by DateAdded
+group by dateadded
 
-Q11
-->
+Q11.->
 select * 
-from tblProducts 
-where DATEDIFF(day, GETDATE(), DateExpiry) < 15
+from tblproducts 
+where datediff(day, getdate(), dateexpiry) < 15
 
-Q12
-
--> SELECT
-    sub1.CID,
-    sub1.TotalOrders,
-    sub2.TotalDollarAmount
-FROM
+Q12.-> select
+    sub1.cid,
+    sub1.totalorders,
+    sub2.totaldollaramount
+from
     (
-        SELECT
-            CID,
-            Count(Order.OrderID) AS TotalOrders
-        FROM [Order]
-        GROUP BY CID
-    ) AS sub1
-    INNER JOIN
+        select
+            cid,
+            count(order.orderid) as totalorders
+        from [order]
+        group by cid
+    ) as sub1
+    inner join
     (
-        SELECT
-            CID,
-            Sum(OrderItem.Quantity*OrderItem.SalePrice)
-                AS TotalDollarAmount
-        FROM OrderItem INNER JOIN [Order]
-        ON OrderItem.OrderID = [Order].OrderID
-        GROUP BY CID
-    ) AS sub2
-    ON sub1.CID = sub2.CID
-ORDER BY sub1.TotalOrders DESC;
+        select
+            cid,
+            sum(orderitem.quantity*orderitem.saleprice)
+                as totaldollaramount
+        from orderitem inner join [order]
+        on orderitem.orderid = [order].orderid
+        group by cid
+    ) as sub2
+    on sub1.cid = sub2.cid
+order by sub1.totalorders desc;
 
-Q13.
--> date(c_day) as date, 
+Q13.-> date(c_day) as date, 
                 sum(total) as total_sale 
            from calendar c 
 left outer join sale s 
@@ -113,19 +94,17 @@ left outer join sale s
          having c_day <= max(s.c_date); 
 
 
-Q.14
--> select * from (
-    select Category,Product_Id,
+Q14.-> select * from (
+    select category,product_id,
     rank() over (partition by category order by discount desc, product_id asc) as product_rank
-    from Product) x
+    from product) x
 where x.product_rank=1
 order by category;
 
-Q.15
--> select DateAdded, count(CustID)
-from Responses
-WHERE DateAdded >=dateadd(day,datediff(day,0,GetDate())- 7,0)
-GROUP BY DateAdded
+Q15.-> select dateadded, count(custid)
+from responses
+where dateadded >=dateadd(day,datediff(day,0,getdate())- 7,0)
+group by dateadded
 
 
 
